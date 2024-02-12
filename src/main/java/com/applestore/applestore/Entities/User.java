@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 @Table(name = "Users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long user_id;
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int user_id;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -22,13 +22,16 @@ public class User {
     private String l_name;
 
     @Column(nullable = false)
+    private String gmail;
+
+    @Column(nullable = false)
     private int isAdmin;
 
-    public long getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(long user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 
@@ -64,6 +67,14 @@ public class User {
         this.l_name = l_name;
     }
 
+    public String getGmail() {
+        return gmail;
+    }
+
+    public void setGmail(String gmail) {
+        this.gmail = gmail;
+    }
+
     public int getIsAdmin() {
         return isAdmin;
     }
@@ -74,12 +85,13 @@ public class User {
 
     public User(){}
 
-    public User(long user_id, String username, String password, String f_name, String l_name, int isAdmin) {
+    public User(int user_id, String username, String password, String f_name, String l_name, String gmail, int isAdmin) {
         this.user_id = user_id;
         this.username = username;
         this.password = password;
         this.f_name = f_name;
         this.l_name = l_name;
+        this.gmail = gmail;
         this.isAdmin = isAdmin;
     }
 }
