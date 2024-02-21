@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm sản phẩm mới</title>
+</head>
+<body>
+  <form>
+    <div class="input-group flex-nowrap">
+      <span class="input-group-text" id="addon-wrapping-0">Tên sản phẩm:</span>
+      <input type="text" class="form-control" placeholder="Ex:iPhone 12" aria-label="Username" aria-describedby="addon-wrapping">
+    </div>
+    <div class="input-group flex-nowrap">
+      <span class="input-group-text" id="addon-wrapping-1">Mô tả sản phẩm:</span>
+      <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+    </div>
+    <div class="input-group flex-nowrap">
+      <span class="input-group-text" id="addon-wrapping-2">Giá:</span>
+      <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+    </div>
+    <div class="input-group flex-nowrap">
+      <span class="input-group-text" id="addon-wrapping-3">Số lượng:</span>
+      <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+    </div>
+    <button th:href="@{'/viewAll'}">Thêm</button>
+    <button>Hủy</button>
+  </form>
+</body>
+</html>

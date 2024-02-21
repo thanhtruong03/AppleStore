@@ -13,7 +13,7 @@ public class Customer {
     private int customer_id;
 
     @Column(unique = true, nullable = false)
-    private String user_id;
+    private int user_id;
 
     @Column(unique = true, nullable = false)
     private String address_line;
@@ -35,11 +35,11 @@ public class Customer {
         this.customer_id = customer_id;
     }
 
-    public String getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 
@@ -78,7 +78,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(int customer_id, String user_id, String address_line, String country, String city, String phone) {
+    public Customer(int customer_id, int user_id, String address_line, String country, String city, String phone) {
         this.customer_id = customer_id;
         this.user_id = user_id;
         this.address_line = address_line;
