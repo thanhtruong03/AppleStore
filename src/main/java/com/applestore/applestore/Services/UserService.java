@@ -1,6 +1,6 @@
 package com.applestore.applestore.Services;
 
-import com.applestore.applestore.DTO.UserDto;
+import com.applestore.applestore.DTOs.UserDto;
 import com.applestore.applestore.Entities.User;
 import com.applestore.applestore.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
