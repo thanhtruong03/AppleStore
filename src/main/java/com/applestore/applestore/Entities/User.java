@@ -25,7 +25,7 @@ public class User {
     private String gmail;
 
     @Column(nullable = false)
-    private int isAdmin;
+    private int is_admin;
 
     public int getUser_id() {
         return user_id;
@@ -75,23 +75,23 @@ public class User {
         this.gmail = gmail;
     }
 
-    public int getIsAdmin() {
-        return isAdmin;
+    public int getIs_admin() {
+        return is_admin;
     }
 
-    public void setIsAdmin(int isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setIs_admin(int isAdmin) {
+        this.is_admin = isAdmin;
     }
 
     public User(){}
 
-    public User(int user_id, String username, String password, String f_name, String l_name, String gmail, int isAdmin) {
+    public User(int user_id, String username, String password, String f_name, String l_name, String gmail, int is_admin) {
         this.user_id = user_id;
         this.username = username;
         this.password = password;
         this.f_name = f_name;
         this.l_name = l_name;
         this.gmail = gmail;
-        this.isAdmin = isAdmin;
+        this.is_admin = is_admin;
     }
 }
