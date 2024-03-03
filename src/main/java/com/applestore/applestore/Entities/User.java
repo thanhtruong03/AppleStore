@@ -24,7 +24,7 @@ public class User {
     @Column(nullable = false)
     private String gmail;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int is_admin;
 
     public int getUser_id() {

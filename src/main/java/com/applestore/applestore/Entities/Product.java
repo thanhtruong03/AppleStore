@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int product_id;
 
     @Column(unique = true, nullable = false)
@@ -20,8 +21,8 @@ public class Product {
     @Column(unique = true, nullable = false)
     private String price;
 
-//    @Column(unique = true, nullable = false)
-//    private String url;
+    @Column(unique = true, nullable = true)
+    private String img;
 
     public int getProduct_id() {
         return product_id;
@@ -63,23 +64,11 @@ public class Product {
         this.price = price;
     }
 
-//    public String getUrl() {
-//        return url;
-//    }
-//
-//    public void setUrl(String url) {
-//        this.url = url;
-//    }
-
-    public Product() {
+    public String getImg() {
+        return img;
     }
 
-    public Product(int product_id, String name, String description, String stock, String price, String url) {
-        this.product_id = product_id;
-        this.name = name;
-        this.description = description;
-        this.stock = stock;
-        this.price = price;
-        //this.url = url;
+    public void setImg(String img) {
+        this.img = img;
     }
 }
