@@ -27,7 +27,6 @@
             <option value="asc">Gia tang dan</option>
             <option value="desc">Gia giam dan</option>
         </select>
-
     </div>
     <div th:if="${listAllProduct.size() > 0} ">
         <table class="border-2">
@@ -91,7 +90,6 @@
     <button type="submit" class="btn btn-primary">Cập nhât</button>
     <button type="button" class="btn btn-second">Hủy</button>
 </form>
-
 <form action="/admin/viewAll" method="get" class="comboBoxForm" hidden="hidden">
     <input name="selectedItem">
 </form>
@@ -109,10 +107,6 @@
         form = document.querySelector(".comboBoxForm")
         form.submit()
     });
-
-
-
-
     // Gắn sự kiện click vào nút "Edit" bằng jQuery
     $(document).on('click', '.edit-btn', function() {
         // Lấy thông tin sản phẩm từ thuộc tính data-product của nút "Edit"

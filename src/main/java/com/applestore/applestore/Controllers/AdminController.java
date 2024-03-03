@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +84,7 @@ public class AdminController {
         productService.deleteProduct(id);
         return "redirect:/admin/viewAll";
     }
+  
     @PostMapping(value = "safe")
     public String xapsep(@PathVariable("id") Integer id) {
         productService.deleteProduct(id);

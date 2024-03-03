@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -49,7 +48,6 @@ public class ProductService {
         return base64Image;
     }
 
-
     public List<ProductDto> listALlProduct(){
         List<ProductDto> listAllProduct = new ArrayList<>();
         System.out.println("List DTO: ");
@@ -65,7 +63,6 @@ public class ProductService {
     public void saveProduct(Product product){
         productRepository.save(product);
     }
-
     public Product getProductById(int id){
         return productRepository.getById(id);
     }
@@ -73,7 +70,6 @@ public class ProductService {
     public void deleteProduct(int id){
         productRepository.deleteById(id);
     }
-
     public List<ProductDto> findProductByName(String search){
         List<ProductDto> listResult = new ArrayList<>();
         for (Product pro : productRepository.findProductsByNameIgnoreCase(search)){
