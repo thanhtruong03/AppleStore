@@ -7,8 +7,9 @@ import com.applestore.applestore.Repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -20,8 +21,9 @@ public class ProductService {
         productDto.setProduct_id(product.getProduct_id());
         productDto.setDescription(product.getDescription());
         productDto.setName(product.getName());
-        productDto.setStock(Integer.valueOf(product.getStock()));
-        productDto.setPrice(Integer.valueOf(product.getPrice()));
+        productDto.setStock(Integer.parseInt(product.getStock()));
+        productDto.setPrice(Integer.parseInt(product.getPrice()));
+        productDto.setColor(product.getColor());
         productDto.setImg(product.getImg());
         return productDto;
     }
@@ -33,6 +35,7 @@ public class ProductService {
         product.setName(productDto.getName());
         product.setStock(String.valueOf(productDto.getStock()));
         product.setPrice(String.valueOf(productDto.getPrice()));
+        product.setColor(productDto.getColor());
         product.setImg(productDto.getImg());
         System.out.println(product.getImg());
         return product;
@@ -48,6 +51,7 @@ public class ProductService {
         return base64Image;
     }
 
+
     public List<ProductDto> listALlProduct(){
         List<ProductDto> listAllProduct = new ArrayList<>();
         System.out.println("List DTO: ");
@@ -55,7 +59,7 @@ public class ProductService {
             listAllProduct.add(convertProductToDto(pro));
         }
         for (ProductDto productDto : listAllProduct){
-            System.out.println(productDto.getImg());
+            System.out.println(productDto.getName());
         }
         return listAllProduct;
     }
@@ -63,6 +67,7 @@ public class ProductService {
     public void saveProduct(Product product){
         productRepository.save(product);
     }
+
     public Product getProductById(int id){
         return productRepository.getById(id);
     }
@@ -70,11 +75,44 @@ public class ProductService {
     public void deleteProduct(int id){
         productRepository.deleteById(id);
     }
+
     public List<ProductDto> findProductByName(String search){
         List<ProductDto> listResult = new ArrayList<>();
         for (Product pro : productRepository.findProductsByNameIgnoreCase(search)){
             listResult.add(convertProductToDto(pro));
         }
         return listResult;
+    }
+
+    public List<ProductDto> getAllOrderByPriceAsc(Boolean condition){
+        List<ProductDto> listProductOrderByPriceAsc = null;
+        if (condition){
+            listProductOrderByPriceAsc = listALlProduct().stream().sorted(Comparator.comparingInt(ProductDto::getPrice))
+                    .toList();
+        } else {
+            listProductOrderByPriceAsc = listALlProduct().stream().sorted(Comparator.comparingInt(ProductDto::getPrice).reversed())
+                    .collect(Collectors.toList());
+        }
+        for (ProductDto productDto : listProductOrderByPriceAsc){
+            System.out.println(productDto.getPrice());
+        }
+        return listProductOrderByPriceAsc;
+    }
+
+    public List<String> getAllColor(){
+        List<String> listColor = productRepository.getAllColor();
+        System.out.println("List color: ");
+        for (String color : listColor){
+            System.out.println(color);
+        }
+        return listColor;
+    }
+
+    public List<ProductDto> getProductByColor(String color){
+        List<ProductDto> listProductByColor = new ArrayList<>();
+        for (Product product : productRepository.getProductsByColorIgnoreCase(color)){
+            listProductByColor.add(convertProductToDto(product));
+        }
+        return listProductByColor;
     }
 }

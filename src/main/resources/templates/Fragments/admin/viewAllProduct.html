@@ -21,12 +21,21 @@
         <a th:href="@{/admin/addNew}">Thêm sản phẩm mới</a>
         <a th:href="@{/admin/viewAll}">Quay ve</a>
         <label th:for="options">Sap xep theo:</label>
-
         <select id="comboBox" name="comboBox">
             <option value=""></option>
             <option value="asc">Gia tang dan</option>
             <option value="desc">Gia giam dan</option>
         </select>
+
+        <form th:action="@{/admin/viewAll}" method="get">
+            <li style="list-style: none" th:each="color : ${listColor}">
+                <input type="radio" th:value="${color}" name="color" id="color"/>
+                <label th:for="${color}">[[${color}]]</label>
+            </li>
+            <button type="submit">Lọc</button>
+        </form>
+
+
     </div>
     <div th:if="${listAllProduct.size() > 0} ">
         <table class="border-2">
@@ -37,6 +46,7 @@
                 <th>Mô tả</th>
                 <th>Số lượng trong kho</th>
                 <th>Giá</th>
+                <th>Màu sắc</th>
                 <th>Hình ảnh</th>
             </tr>
             </thead>
@@ -48,6 +58,7 @@
                     <td>[[${ProductDto.getDescription}]]</td>
                     <td>[[${ProductDto.getStock}]]</td>
                     <td>[[${ProductDto.getPrice}]]</td>
+                    <td>[[${ProductDto.getColor}]]</td>
                     <td>
                         <img style="width: 150px" th:src="'data:image/jpeg;base64,' + ${ProductDto.getImg()}"/>
                     </td>
@@ -57,7 +68,8 @@
                                 th:data-id= "${ProductDto.getProduct_id()}"
                                 th:data-des= "${ProductDto.getDescription()}"
                                 th:data-stock= "${ProductDto.getStock()}"
-                                th:data-price= "${ProductDto.getPrice()}">Edit</button>
+                                th:data-price= "${ProductDto.getPrice()}"
+                                th:data-color="${ProductDto.getColor()}">Edit</button>
                         <a th:href="@{'/admin/delete/id=' + ${ProductDto.getProduct_id()}}">Xóa</a>
                     </td>
                 </tr>
@@ -84,14 +96,23 @@
         <input type="text" name="price"  class="form-control" aria-label="Username" aria-describedby="addon-wrapping">
     </div>
     <div class="input-group flex-nowrap">
-        <span class="input-group-text" id="addon-wrapping-3">Số lượng:</span>
+        <span class="input-group-text" id="addon-wrapping-3">Màu sac:</span>
+        <input type="text" name="color"  class="form-control" aria-label="Username" aria-describedby="addon-wrapping">
+    </div>
+    <div class="input-group flex-nowrap">
+        <span class="input-group-text" id="addon-wrapping-4">Số lượng:</span>
         <input type="number" name="stock" class="form-control" aria-label="Username" aria-describedby="addon-wrapping">
     </div>
     <button type="submit" class="btn btn-primary">Cập nhât</button>
     <button type="button" class="btn btn-second">Hủy</button>
 </form>
-<form action="/admin/viewAll" method="get" class="comboBoxForm" hidden="hidden">
+
+<form th:action="@{/admin/viewAll}" method="get" class="comboBoxForm" hidden="hidden">
     <input name="selectedItem">
+</form>
+
+<form th:action="@{/admin/viewAll}" method="get" class="radioForm" hidden="hidden">
+    <input name="color">
 </form>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -107,6 +128,7 @@
         form = document.querySelector(".comboBoxForm")
         form.submit()
     });
+
     // Gắn sự kiện click vào nút "Edit" bằng jQuery
     $(document).on('click', '.edit-btn', function() {
         // Lấy thông tin sản phẩm từ thuộc tính data-product của nút "Edit"
@@ -116,6 +138,7 @@
             des: $(this).data('des'),
             price: $(this).data('price'),
             stock: $(this).data('stock'),
+            color: $(this).data('color')
         }
         console.log(product)
 
@@ -125,6 +148,7 @@
         $('#editForm textarea[name="description"]').val(product.des);
         $('#editForm input[name="price"]').val(product.price);
         $('#editForm input[name="stock"]').val(product.stock);
+        $('#editForm input[name="color"]').val(product.color);
 
         // Hiển thị form chỉnh sửa
         $('#editForm').show();

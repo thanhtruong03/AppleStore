@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,15 +20,35 @@ public class AdminController {
     private ProductService productService;
 
     @GetMapping("viewAll")
-    public String viewAllProduct(Model model, @Param("search") String search, @Param("selectedItem") String selectedItem){
+    public String viewAllProduct(Model model, @Param("search") String search, @Param("selectedItem") String selectedItem, @Param("color") String color){
         List<ProductDto> listAllProduct = new ArrayList<>();
-        if (search == null) {
+        List<String> listColor = productService.getAllColor();
+        if (search == null && selectedItem == null && color == null) {
+            System.out.println("Normal list: ");
             listAllProduct = productService.listALlProduct();
         }
         else if (search != null){
+            System.out.println("Search result: ");
             listAllProduct = productService.findProductByName(search);
         }
+        else {
+            if (selectedItem != null){
+                if (selectedItem.equals("asc")){
+                    System.out.println("List ordered asc: ");
+                    listAllProduct = productService.getAllOrderByPriceAsc(true);
+                } else if (selectedItem.equals("desc")){
+                    System.out.println("List ordered desc: ");
+                    listAllProduct = productService.getAllOrderByPriceAsc(false);
+                }
+            }
+        }
+        if (color != null){
+            listAllProduct = productService.getProductByColor(color);
+        }
         model.addAttribute("listAllProduct", listAllProduct);
+        model.addAttribute("listColor", listColor);
+        System.out.println("SelectedItem: " + selectedItem);
+        System.out.println("SelectedColor: " + color);
         return "Fragments/admin/viewAllProduct";
     }
 
@@ -42,6 +63,7 @@ public class AdminController {
             @RequestParam("description") String description,
             @RequestParam("price") String price,
             @RequestParam("stock") String stock,
+            @RequestParam("color") String color,
             @RequestParam("img") MultipartFile imageFile
     ){
         ProductDto productDto = new ProductDto();
@@ -49,6 +71,7 @@ public class AdminController {
         productDto.setDescription(description);
         productDto.setStock(Integer.parseInt(stock));
         productDto.setPrice(Integer.parseInt(price));
+        productDto.setColor(color);
         productDto.setImg(productService.encodingImage(imageFile));
         Product product = productService.convertProductDtoToEntity(productDto);
         productService.saveProduct(product);
@@ -61,13 +84,15 @@ public class AdminController {
             @RequestParam("name") String name,
             @RequestParam("description") String description,
             @RequestParam("price") String price,
-            @RequestParam("stock") String stock
+            @RequestParam("stock") String stock,
+            @RequestParam("color") String color
     ){
         Product product = productService.getProductById(id);
         product.setName(name);
         product.setDescription(description);
         product.setStock(String.valueOf(stock));
         product.setPrice(String.valueOf(price));
+        product.setColor(color);
         productService.saveProduct(product);
         return "redirect:/admin/viewAll";
     }
@@ -84,12 +109,5 @@ public class AdminController {
         productService.deleteProduct(id);
         return "redirect:/admin/viewAll";
     }
-  
-    @PostMapping(value = "safe")
-    public String xapsep(@PathVariable("id") Integer id) {
-        productService.deleteProduct(id);
-        return "redirect:/admin/viewAll";
-    }
-
 
 }

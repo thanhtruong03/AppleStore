@@ -16,12 +16,15 @@ public class Product {
     private String description;
 
     @Column(unique = true, nullable = false)
+    private String color;
+
+    @Column(unique = true, nullable = false)
     private String stock;
 
     @Column(unique = true, nullable = false)
     private String price;
 
-    @Column(unique = true, nullable = true)
+    @Column(unique = true, nullable = false)
     private String img;
 
     public int getProduct_id() {
@@ -62,6 +65,14 @@ public class Product {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getImg() {
