@@ -18,7 +18,10 @@ import java.util.List;
 public class AdminController {
     @Autowired
     private ProductService productService;
-
+    @GetMapping("/")
+    public String index(){
+        return "/Fragments/admin/header";
+    }
     @GetMapping("viewAll")
     public String viewAllProduct(Model model, @Param("search") String search, @Param("selectedItem") String selectedItem, @Param("color") String color){
         List<ProductDto> listAllProduct = new ArrayList<>();

@@ -5,15 +5,16 @@
     <title>Title</title>
 </head>
 <body>
-    <form action="/login" method="POST">
-        <p th:text="${message}"></p>
+    <form method="post" role="form" th:action="@{/login}">
+
         <div>
             <p>Username:</p>
             <input type="text" id="username" name="username" placeholder="Enter username...">
             <p>Password:</p>
             <input type="password" id="password" name="password" placeholder="Enter password...">
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" value="Log in" class="btn btn-secondary">Login</button>
+        <a href="/register" class="btn btn-secondary">Register</a>
     </form>
 </body>
 </html>

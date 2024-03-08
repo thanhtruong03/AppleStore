@@ -1,47 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Register</title>
     <meta charset="UTF-8">
-    <title>Title</title>
 </head>
 <body>
-<form action="/login" method="POST">
-    <div>
-        <p>Username:</p>
-        <input type="text" id="username" name="username" placeholder="Enter username...">
-        <p>Password:</p>
-        <input type="password" id="password" name="password" placeholder="Enter password...">
-        <p>Lastname:</p>
-        <input type="email" id="gmail" name="gmail" placeholder="Enter your gmail..." required minlength="8" maxlength="20">
-        <p>Lastname:</p>
-        <input type="text" id="l_name" name="l_name" placeholder="Enter your last name...">
-        <p>Firstname:</p>
-        <input type="text" id="f_name" name="f_name" placeholder="Enter your first name...">
+<div th:if = "${param.success}">
+    Registration successfully
+</div>
+<form method="POST" th:action="@{/register}" th:object="${user}">
+    <div >
+        <label>Last name: </label>
+        <input
+                type="text"
+                class="form-control"
+                placeholder="Last name..."
+                th:field="*{l_name}">
     </div>
-    <button type="submit">Login</button>
-</form>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form action="/login" method="POST">
     <div>
-        <p>Username:</p>
-        <input type="text" id="username" name="username" placeholder="Enter username...">
-        <p>Password:</p>
-        <input type="password" id="password" name="password" placeholder="Enter password...">
-        <p>Lastname:</p>
-        <input type="email" id="gmail" name="gmail" placeholder="Enter your gmail..." required minlength="8" maxlength="20">
-        <p>Lastname:</p>
-        <input type="text" id="l_name" name="l_name" placeholder="Enter your last name...">
-        <p>Firstname:</p>
-        <input type="text" id="f_name" name="f_name" placeholder="Enter your first name...">
+        <label>First name: </label>
+        <input
+                type="text"
+                class="form-control"
+                placeholder="First name..."
+                th:field="*{f_name}">
     </div>
-    <button type="submit">Login</button>
+    <div>
+        <label>Username</label>
+        <input
+                type="text"
+                class="form-control"
+                placeholder="Username"
+                th:field="*{username}">
+    </div>
+    <div>
+        <label>Gmail</label>
+        <input
+                type="text"
+                class="form-control"
+                placeholder="Email"
+                th:field="*{gmail}">
+    </div>
+    <div>
+        <label>Password</label>
+        <input
+                type="password"
+                class="form-control"
+                placeholder="Password"
+                th:field="*{password}">
+    </div>
+    <button type="submit">Register</button>
 </form>
 </body>
 </html>
