@@ -5,6 +5,17 @@ import com.applestore.applestore.DTOs.UserDto;
 import com.applestore.applestore.Entities.Role;
 import com.applestore.applestore.Entities.UserEntity;
 import com.applestore.applestore.Repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import com.applestore.applestore.DTOs.RegisterDto;
+import com.applestore.applestore.DTOs.UserDto;
+import com.applestore.applestore.Entities.Role;
+import com.applestore.applestore.Entities.UserEntity;
+import com.applestore.applestore.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,26 +23,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service
 
+@Service
 public class UserService {
-    private final UserRepository userRepo;
-    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
+    private UserRepository userRepo;
     @Autowired
     public UserService(UserRepository userRepo, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
-
-//    public UserDto findByUsername(String username){
-//        UserEntity user = userRepo.findByUsername(username);
-//        if(user !=null){
-//            return mapToUserDto(user);
-//        }
-//        return null;
-//    }
 
     public UserDto findByGmail(String email) {
         UserEntity user = userRepo.findUserByGmail(email);
@@ -69,7 +72,7 @@ public class UserService {
         userRepo.save(user);
     }
     public UserDto mapToUserDto(UserEntity user){
-        return UserDto.builder()
+        UserDto userDto = UserDto.builder()
                 .user_id(user.getUser_id())
                 .username(user.getUsername())
                 .password(user.getPassword())
@@ -77,6 +80,17 @@ public class UserService {
                 .f_name(user.getF_name())
                 .gmail(user.getGmail())
                 .build();
+        return userDto;
+    }
+
+    public UserDto getUserById(int id){
+        UserDto userDto = new UserDto();
+        UserEntity user = userRepo.getReferenceById(id);
+        userDto.setUser_id(user.getUser_id());
+        userDto.setGmail(user.getGmail());
+        userDto.setF_name(user.getF_name());
+        userDto.setL_name(user.getL_name());
+        return userDto;
     }
 
 }

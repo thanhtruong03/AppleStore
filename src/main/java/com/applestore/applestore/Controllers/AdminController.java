@@ -2,6 +2,7 @@ package com.applestore.applestore.Controllers;
 import com.applestore.applestore.DTOs.*;
 
 import com.applestore.applestore.Entities.Product;
+import com.applestore.applestore.Services.OrderService;
 import com.applestore.applestore.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -18,10 +19,10 @@ import java.util.List;
 public class AdminController {
     @Autowired
     private ProductService productService;
-    @GetMapping("/")
-    public String index(){
-        return "/Fragments/admin/header";
-    }
+    @Autowired
+    private OrderService orderService;
+
+    // -------------------- MANAGEMENT PRODUCT ---------------------------------------------
     @GetMapping("viewAll")
     public String viewAllProduct(Model model, @Param("search") String search, @Param("selectedItem") String selectedItem, @Param("color") String color){
         List<ProductDto> listAllProduct = new ArrayList<>();
@@ -52,12 +53,12 @@ public class AdminController {
         model.addAttribute("listColor", listColor);
         System.out.println("SelectedItem: " + selectedItem);
         System.out.println("SelectedColor: " + color);
-        return "Fragments/admin/viewAllProduct";
+        return "Fragments/admin/view-all-product";
     }
 
     @GetMapping("addNew")
     public String addNewProduct(){
-        return "Fragments/admin/addNewProduct";
+        return "Fragments/admin/add-new-product";
     }
 
     @PostMapping("save")
@@ -86,7 +87,7 @@ public class AdminController {
             @RequestParam("id") Integer id,
             @RequestParam("name") String name,
             @RequestParam("description") String description,
-            @RequestParam("price") String price,
+            @RequestParam("price") int price,
             @RequestParam("stock") String stock,
             @RequestParam("color") String color
     ){
@@ -94,7 +95,7 @@ public class AdminController {
         product.setName(name);
         product.setDescription(description);
         product.setStock(String.valueOf(stock));
-        product.setPrice(String.valueOf(price));
+        product.setPrice(price);
         product.setColor(color);
         productService.saveProduct(product);
         return "redirect:/admin/viewAll";
@@ -104,13 +105,52 @@ public class AdminController {
     public String editInformation(@PathVariable("id") Integer id, Model model){
         model.addAttribute("product", productService.convertProductToDto(productService.getProductById(id)));
         model.addAttribute("id", id);
-        return "Fragments/admin/editInforProduct";
+        return "Fragments/admin/edit-infor-product";
     }
 
     @GetMapping("delete/id={id}")
     public String deleteProduct(@PathVariable("id") Integer id) {
         productService.deleteProduct(id);
         return "redirect:/admin/viewAll";
+    }
+
+    // -------------------- MANAGEMENT ORDER ---------------------------------------------
+    @GetMapping("viewAllOrder")
+    public String viewAllOrder(Model model){
+        model.addAttribute("listDetailOrder", orderService.getDetailOrder());
+        return "Fragments/admin/management-order";
+    }
+
+    @GetMapping("notApproved")
+    public String viewListNotApprovedOrder(Model model){
+        model.addAttribute("listNotApproved", orderService.getListOrderApprovedOrNot(0));
+        return "Fragments/admin/not-approved-order";
+    }
+
+    @GetMapping("isApproved")
+    public String viewListIsApprovedOrder(Model model){
+        model.addAttribute("listIsApproved", orderService.getListOrderApprovedOrNot(1));
+        return "Fragments/admin/is-approved-order";
+    }
+
+    @GetMapping("delivered")
+    public String viewListDeliveredOrder(Model model){
+        model.addAttribute("listDeliveredOrder", orderService.getListOrderApprovedOrNot(2));
+        return "Fragments/admin/delivered-order";
+    }
+
+    @GetMapping("accept/orderid={id}")
+    public String acceptOrder(@PathVariable("id") Integer orderId){
+        System.out.println("OrderID: " + orderId);
+        orderService.updateOrderStatus(1,orderId);
+        return "redirect:/admin/notApproved";
+    }
+
+    @GetMapping("complete/orderid={id}")
+    public String completeOrder(@PathVariable("id") Integer orderId){
+        System.out.println("OrderID: " + orderId);
+        orderService.updateOrderStatus(2,orderId);
+        return "redirect:/admin/isApproved";
     }
 
 }

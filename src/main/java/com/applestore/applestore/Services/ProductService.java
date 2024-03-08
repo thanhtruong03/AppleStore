@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ public class ProductService {
         productDto.setDescription(product.getDescription());
         productDto.setName(product.getName());
         productDto.setStock(Integer.parseInt(product.getStock()));
-        productDto.setPrice(Integer.parseInt(product.getPrice()));
+        productDto.setPrice(product.getPrice());
         productDto.setColor(product.getColor());
         productDto.setImg(product.getImg());
         return productDto;
@@ -35,7 +36,7 @@ public class ProductService {
         product.setDescription(productDto.getDescription());
         product.setName(productDto.getName());
         product.setStock(String.valueOf(productDto.getStock()));
-        product.setPrice(String.valueOf(productDto.getPrice()));
+        product.setPrice(productDto.getPrice());
         product.setColor(productDto.getColor());
         product.setImg(productDto.getImg());
         System.out.println(product.getImg());
@@ -56,7 +57,7 @@ public class ProductService {
     public List<ProductDto> listALlProduct(){
         List<ProductDto> listAllProduct = new ArrayList<>();
         System.out.println("List DTO: ");
-        for(Product pro : productRepository.findAll()){
+        for(Product pro : productRepository.findAllProduct()){
             listAllProduct.add(convertProductToDto(pro));
         }
         for (ProductDto productDto : listAllProduct){
@@ -70,7 +71,7 @@ public class ProductService {
     }
 
     public Product getProductById(int id){
-        return productRepository.getById(id);
+        return productRepository.getReferenceById(id);
     }
 
     public void deleteProduct(int id){
@@ -86,7 +87,7 @@ public class ProductService {
     }
 
     public List<ProductDto> getAllOrderByPriceAsc(Boolean condition){
-        List<ProductDto> listProductOrderByPriceAsc = null;
+        List<ProductDto> listProductOrderByPriceAsc = new ArrayList<>();
         if (condition){
             listProductOrderByPriceAsc = listALlProduct().stream().sorted(Comparator.comparingInt(ProductDto::getPrice))
                     .toList();
@@ -116,4 +117,10 @@ public class ProductService {
         }
         return listProductByColor;
     }
+
+    public String formatCurrency(int price){
+        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return vndFormat.format(price);
+    }
+
 }

@@ -22,7 +22,7 @@ public class Product {
     private String stock;
 
     @Column(unique = true, nullable = false)
-    private String price;
+    private int price;
 
     @Column(unique = true, nullable = false)
     private String img;
@@ -59,11 +59,11 @@ public class Product {
         this.stock = stock;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
