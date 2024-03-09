@@ -1,15 +1,21 @@
 package com.applestore.applestore.DTOs;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class detailOrderDto {
-    private int order_id, price;
-    private String product_name, product_color, customer_l_name, customer_f_name, address_line, city, country, order_date, phone;
+    private int order_id;
+    private String price, product_name, product_color, customer_l_name, customer_f_name, address_line, city, country, order_date, phone;
+
+    public int getIntPrice() {
+        String stringPrice = price.replace(".", "").replace(" ", "").replace("₫", "").replace(",", "");
+        int intPrice = Integer.parseInt(stringPrice);
+        System.out.println(stringPrice + "Check");
+        return intPrice;
+    }
 }

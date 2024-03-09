@@ -74,7 +74,7 @@ public class AdminController {
         productDto.setName(name);
         productDto.setDescription(description);
         productDto.setStock(Integer.parseInt(stock));
-        productDto.setPrice(Integer.parseInt(price));
+        productDto.setPrice(price);
         productDto.setColor(color);
         productDto.setImg(productService.encodingImage(imageFile));
         Product product = productService.convertProductDtoToEntity(productDto);
@@ -123,19 +123,19 @@ public class AdminController {
 
     @GetMapping("notApproved")
     public String viewListNotApprovedOrder(Model model){
-        model.addAttribute("listNotApproved", orderService.getListOrderApprovedOrNot(0));
+        model.addAttribute("listNotApproved", orderService.getStatusOrder(0));
         return "Fragments/admin/not-approved-order";
     }
 
     @GetMapping("isApproved")
     public String viewListIsApprovedOrder(Model model){
-        model.addAttribute("listIsApproved", orderService.getListOrderApprovedOrNot(1));
+        model.addAttribute("listIsApproved", orderService.getStatusOrder(1));
         return "Fragments/admin/is-approved-order";
     }
 
     @GetMapping("delivered")
     public String viewListDeliveredOrder(Model model){
-        model.addAttribute("listDeliveredOrder", orderService.getListOrderApprovedOrNot(2));
+        model.addAttribute("listDeliveredOrder", orderService.getStatusOrder(2));
         return "Fragments/admin/delivered-order";
     }
 

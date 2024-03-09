@@ -1,27 +1,25 @@
 package com.applestore.applestore.Entities;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Customers")
 public class Customer {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int customer_id;
 
     @Column(unique = true, nullable = false)
     private int user_id;
 
-    @Column(unique = true, nullable = false)
+    @Column(columnDefinition = "nvarchar(max)", nullable = false)
     private String address_line;
 
-    @Column(unique = true, nullable = false)
+    @Column(columnDefinition = "nvarchar(255)", nullable = false)
     private String country;
 
-    @Column(unique = true, nullable = false)
+    @Column(columnDefinition = "nvarchar(255)", nullable = false)
     private String city;
 
     @Column(unique = true, nullable = false)

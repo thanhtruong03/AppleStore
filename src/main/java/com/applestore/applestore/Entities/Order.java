@@ -6,18 +6,19 @@ import jakarta.persistence.*;
 public class Order {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int order_id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private int customer_id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private int product_id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String order_date;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private int status;
 
     public int getOrder_id() {

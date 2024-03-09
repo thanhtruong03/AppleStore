@@ -76,7 +76,7 @@ public class OrderService {
     }
 
     // DANH SACH CAC ORDER DUOC DUYET HOAC CHUA
-    public List<detailOrderDto> getListOrderApprovedOrNot(int status){
+    public List<detailOrderDto> getStatusOrder(int status){
         List<OrderDto> list = new ArrayList<>();
         for (Order order : orderRepository.listApprovedOrNotOrder(status)){
             list.add(convertEntityToDto(order));

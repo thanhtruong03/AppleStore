@@ -9,22 +9,22 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int product_id;
 
-    @Column(unique = true, nullable = false)
+    @Column(columnDefinition = "nvarchar(255)", nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(columnDefinition = "nvarchar(max)", nullable = false)
     private String description;
 
-    @Column(unique = true, nullable = false)
+    @Column(columnDefinition = "nvarchar(50)", nullable = false)
     private String color;
 
-    @Column(unique = true, nullable = false)
+    @Column(columnDefinition = "nvarchar(20)", nullable = false)
     private String stock;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private int price;
 
-    @Column(unique = true, nullable = false)
+    @Column(columnDefinition = "varchar(max)", nullable = false)
     private String img;
 
     public int getProduct_id() {

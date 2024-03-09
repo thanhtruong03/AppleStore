@@ -6,17 +6,27 @@ import com.applestore.applestore.Entities.Product;
 
 import com.applestore.applestore.Repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.PushBuilder;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+
+
 
     public ProductDto convertProductToDto(Product product){
         ProductDto productDto = new ProductDto();
@@ -24,7 +34,7 @@ public class ProductService {
         productDto.setDescription(product.getDescription());
         productDto.setName(product.getName());
         productDto.setStock(Integer.parseInt(product.getStock()));
-        productDto.setPrice(product.getPrice());
+        productDto.setPrice(formatCurrency(product.getPrice()));
         productDto.setColor(product.getColor());
         productDto.setImg(product.getImg());
         return productDto;
@@ -36,7 +46,7 @@ public class ProductService {
         product.setDescription(productDto.getDescription());
         product.setName(productDto.getName());
         product.setStock(String.valueOf(productDto.getStock()));
-        product.setPrice(productDto.getPrice());
+        product.setPrice(Integer.parseInt(productDto.getPrice()));
         product.setColor(productDto.getColor());
         product.setImg(productDto.getImg());
         System.out.println(product.getImg());
@@ -61,7 +71,7 @@ public class ProductService {
             listAllProduct.add(convertProductToDto(pro));
         }
         for (ProductDto productDto : listAllProduct){
-            System.out.println(productDto.getName());
+            System.out.println(productDto.getPrice() + " " + productDto.getPrice().getClass());
         }
         return listAllProduct;
     }
@@ -87,13 +97,23 @@ public class ProductService {
     }
 
     public List<ProductDto> getAllOrderByPriceAsc(Boolean condition){
-        List<ProductDto> listProductOrderByPriceAsc = new ArrayList<>();
+        List<ProductDto> listProductOrderByPriceAsc = listALlProduct();
         if (condition){
-            listProductOrderByPriceAsc = listALlProduct().stream().sorted(Comparator.comparingInt(ProductDto::getPrice))
-                    .toList();
+            Comparator<ProductDto> comparator = new Comparator<ProductDto>() {
+                @Override
+                public int compare(ProductDto o1, ProductDto o2) {
+                    return o1.getIntPrice() - o2.getIntPrice();
+                }
+            };
+            listProductOrderByPriceAsc.sort(comparator);
         } else {
-            listProductOrderByPriceAsc = listALlProduct().stream().sorted(Comparator.comparingInt(ProductDto::getPrice).reversed())
-                    .collect(Collectors.toList());
+            Comparator<ProductDto> comparator = new Comparator<ProductDto>() {
+                @Override
+                public int compare(ProductDto o1, ProductDto o2) {
+                    return o2.getIntPrice() - o1.getIntPrice();
+                }
+            };
+            listProductOrderByPriceAsc.sort(comparator);
         }
         for (ProductDto productDto : listProductOrderByPriceAsc){
             System.out.println(productDto.getPrice());
@@ -119,8 +139,8 @@ public class ProductService {
     }
 
     public String formatCurrency(int price){
-        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        return vndFormat.format(price);
+        DecimalFormat df = new DecimalFormat("#,###.##");
+        return df.format(price) + "₫";
     }
 
 }
