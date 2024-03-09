@@ -30,6 +30,7 @@ public class ProductService {
 
     public ProductDto convertProductToDto(Product product){
         ProductDto productDto = new ProductDto();
+       
         productDto.setProduct_id(product.getProduct_id());
         productDto.setDescription(product.getDescription());
         productDto.setName(product.getName());

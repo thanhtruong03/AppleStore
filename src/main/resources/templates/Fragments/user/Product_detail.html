@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sản phẩm</title>
+    <style>
+        /* Style cho khung hình chữ nhật */
+        .product-detail-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .product-image {
+            width: 50%;
+            padding: 10px;
+            background-color: #cccccc;
+        }
+
+        .product-info {
+            width: 50%;
+            padding: 10px;
+        }
+
+        .product-info p {
+            margin-bottom: 10px;
+        }
+
+        .buy-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none; /* Add this line to remove underline from anchor */
+            display: inline-block; /* Add this line to make anchor behave like a button */
+        }
+
+        .buy-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chi tiết sản phẩm</h1>
+    <div class="product-detail-container">
+        <div class="product-image">
+            <!-- Here, we assume productDto.getImg() returns a base64 encoded image -->
+            <img style="width: 500px" th:src="'data:image/jpeg;base64,' + ${productDto.getImg()}"/>
+        
+        <div class="product-info">
+            <p><strong>Tên sản phẩm:</strong> <span th:text="${productDto.getName()}"></span></p>
+            <p><strong>Giá tiền:</strong> <span th:text="${productDto.getPrice()}"></span></p>
+            <p><strong>Màu:</strong> <span th:text="${productDto.getColor()}"></span></p>
+            <p><strong>Số lượng còn lại:</strong> <span th:text="${productDto.getStock()}"></span></p>
+            <p><strong>Mô tả:</strong> <span th:text="${productDto.getDescription()}"></span></p>
+            <a href="/checkout" class="buy-button">Mua hàng</a>
+        </div>
+        </div>
+    </div>
+</body>
+</html>
