@@ -39,10 +39,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("[ROLE_USER]")) {
+            System.out.println("CSH: "+grantedAuthority.getAuthority());
+            if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
                 isUser = true;
                 break;
-            } else if (grantedAuthority.getAuthority().equals("[ROLE_ADMIN]")) {
+            } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
                 isAdmin = true;
                 break;
             }

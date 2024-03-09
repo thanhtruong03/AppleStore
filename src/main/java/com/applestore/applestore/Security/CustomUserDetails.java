@@ -20,9 +20,10 @@ public class CustomUserDetails implements UserDetails {
     private String gmail;
     private String l_name;
     private String f_name;
-    private List<GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(UserEntity user){
+        this.user_id = user.getUser_id();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.gmail = user.getGmail();
@@ -33,7 +34,9 @@ public class CustomUserDetails implements UserDetails {
                 .stream(user.getRoles().toString().split(","))
                         .map(au -> {
                             System.out.println("AU in CUD: "+au);
-                            SimpleGrantedAuthority sga = new SimpleGrantedAuthority(au);
+                            String cleanedAuthority = au.trim().replace("[", "").replace("]", "");
+                            System.out.println("Clean in CUD: "+cleanedAuthority);
+                            SimpleGrantedAuthority sga = new SimpleGrantedAuthority(cleanedAuthority);
                             return sga;
                         })
                         .collect(Collectors.toList());
@@ -43,23 +46,7 @@ public class CustomUserDetails implements UserDetails {
         return this.authorities;
     }
 
-//    public static CustomUserDetails mapUserToUserDetail(UserEntity user){
-//        List<GrantedAuthority> listAuthorities = user.getRoles().stream()
-//                .map(role -> {
-//                    System.out.println(role.getName());
-//                    return new  SimpleGrantedAuthority(role.getName());
-//                })
-//                .collect(Collectors.toList());
-//        return new CustomUserDetails(
-//                user.getUser_id(),
-//                user.getUsername(),
-//                user.getPassword(),
-//                user.getGmail(),
-//                user.getL_name(),
-//                user.getF_name(),
-//                listAuthorities
-//        );
-//    }
+
     @Override
     public String getPassword() {
         return this.password;
