@@ -111,12 +111,44 @@ public class OrderService {
         }
         return listDetailOrder;
     }
+    
+    //lấy thông tin đơn hàng bằng id khách hàng
+    public List<OrderDto> getOrderByCustomerId(int customer_id){
+        List<OrderDto> listOrder = new ArrayList<>();
+        for (Order order : orderRepository.findByCustomerId(customer_id)){
+            listOrder.add(convertEntityToDto(order));
+        }
+        
+        return listOrder;
+    }
+    
+    public List<detailOrderDto> getDetailOrderByCustomerId(int customer_id){
+        List<detailOrderDto> listOrder = new ArrayList<>();
+        for (OrderDto orderDto : getOrderByCustomerId(customer_id)){
+            CustomerDto customer = customerService.getCustomerById(orderDto.getCustomer_id());
+            ProductDto product = productService.convertProductToDto(productService.getProductById(orderDto.getProduct_id()));
+            detailOrderDto detailOrder = new detailOrderDto();
+            detailOrder.setOrder_date(orderDto.getOrder_date());
+            detailOrder.setProduct_name(product.getName());
+            detailOrder.setProduct_color(product.getColor());
+            detailOrder.setPrice(product.getPrice());
+            detailOrder.setAddress_line(customer.getAddress_line());
+            detailOrder.setImg(product.getImg());
+            listOrder.add(detailOrder);
+        }
+        
+        return listOrder;
+    }
 
 
     public void updateOrderStatus(int status, int orderId){
         Order order = orderRepository.getReferenceById(orderId);
         order.setStatus(status);
         orderRepository.save(order);
+    }
+    
+    public void saveOrder(Order order) {
+    	orderRepository.save(order);
     }
 
 }

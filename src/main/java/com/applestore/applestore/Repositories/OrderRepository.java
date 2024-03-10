@@ -22,4 +22,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query(value = "UPDATE ORDERS SET ORDERS.STATUS = ?1 WHERE ORDERS.ORDER_ID = ?2", nativeQuery = true)
     void updateStatusOrder(int status, int id);
+    
+    @Query(value = "SELECT * FROM ORDERS WHERE CUSTOMER_ID = ?1", nativeQuery = true)
+    List<Order> findByCustomerId(int customer_id);
 }

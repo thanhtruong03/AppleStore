@@ -37,10 +37,27 @@
             cursor: pointer;
             text-decoration: none; /* Add this line to remove underline from anchor */
             display: inline-block; /* Add this line to make anchor behave like a button */
+            margin-right: 10px; /* Add margin for spacing */
         }
 
         .buy-button:hover {
             background-color: #0056b3;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background-color: #495057;
         }
     </style>
 </head>
@@ -49,17 +66,37 @@
     <div class="product-detail-container">
         <div class="product-image">
             <!-- Here, we assume productDto.getImg() returns a base64 encoded image -->
-            <img style="width: 500px" th:src="'data:image/jpeg;base64,' + ${productDto.getImg()}"/>
-        
-        <div class="product-info">
-            <p><strong>Tên sản phẩm:</strong> <span th:text="${productDto.getName()}"></span></p>
-            <p><strong>Giá tiền:</strong> <span th:text="${productDto.getPrice()}"></span></p>
-            <p><strong>Màu:</strong> <span th:text="${productDto.getColor()}"></span></p>
-            <p><strong>Số lượng còn lại:</strong> <span th:text="${productDto.getStock()}"></span></p>
-            <p><strong>Mô tả:</strong> <span th:text="${productDto.getDescription()}"></span></p>
-            <a href="/checkout" class="buy-button">Mua hàng</a>
+            <img style="width: 500px" th:src="'data:image/jpeg;base64,' + ${productDto.img}"/>
         </div>
+        <div class="product-info">
+        	<p><strong>Mã sản phẩm:</strong> <span th:text="${productDto.product_id}"></span></p>
+            <p><strong>Tên sản phẩm:</strong> <span th:text="${productDto.name}"></span></p>
+            <p><strong>Giá tiền:</strong> <span th:text="${productDto.price}"></span></p>
+            <p><strong>Màu:</strong> <span th:text="${productDto.color}"></span></p>
+            <p><strong>Số lượng còn lại:</strong> <span th:text="${productDto.stock}"></span></p>
+            <p><strong>Mô tả:</strong> <span th:text="${productDto.description}"></span></p>
+            <a href="#" onclick="checkCustomerInfo()" class="buy-button">Mua hàng</a>
+            <button onclick="goBack()" class="back-button">Quay lại</button>
         </div>
     </div>
+
+    <script th:inline="javascript">
+        var customerDto = /*[[${customerDto}]]*/ null;
+        var product_id = /*[[${productDto.product_id}]]*/ null;
+
+        function checkCustomerInfo() {
+            var customerInfoExists = customerDto != null;
+
+            if (customerInfoExists) {
+                window.location.href = "/user/checkout?product_id=[[${productDto.product_id}]]";
+            } else {
+                window.location.href = "/user/enter_customer_info";
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>

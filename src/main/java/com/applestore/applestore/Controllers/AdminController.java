@@ -21,6 +21,7 @@ public class AdminController {
     private ProductService productService;
     @Autowired
     private OrderService orderService;
+    
     @GetMapping("/")
     public String index(){
         return "Fragments/admin/header";
