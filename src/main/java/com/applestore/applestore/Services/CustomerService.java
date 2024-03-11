@@ -29,6 +29,12 @@ public class CustomerService {
         return customerDto;
     }
     
+    public Customer getCustomerById1(int id){
+        
+        Customer customer = customerRepository.getReferenceById(id);
+        return customer;
+    }
+    
     public CustomerDto getCustomerByuserId(int user_id){
         List<Customer> customers = customerRepository.findAll();
         		

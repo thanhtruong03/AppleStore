@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Điền Thông tin khách hàng</title>
+    <title>Chỉnh sửa thông tin cá nhân</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            display: flex; /* Sử dụng flexbox để căn giữa nội dung */
+            justify-content: center; /* Căn giữa theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            height: 100vh; /* Thiết lập chiều cao của body là 100% của viewport */
         }
         .container {
             max-width: 600px;
@@ -24,7 +23,6 @@
         }
         h1 {
             color: #333;
-            text-align: center;
             margin-bottom: 20px;
         }
         form {
@@ -35,7 +33,9 @@
             display: block;
             margin-bottom: 5px;
         }
-        input[type="text"] {
+        input[type="text"],
+        input[type="email"],
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
@@ -60,22 +60,25 @@
 </head>
 <body>
     <div class="container">
-        <h1>Điền Thông tin khách hàng</h1>
-        <form th:action="@{/user/save}" method="post"  >
-            <label for="address_line">Địa chỉ nhận hàng:</label>
-            <input type="text" id="address_line" name="address_line">
+        <h1>Chỉnh sửa thông tin cá nhân</h1>
+        <form th:action="@{/user/update}" method="post"  >
+   
+            <label for="city">Thành phố:</label>
+            <input type="text" id="city" name="city" placeholder="Nhập thành phố của bạn.." th:value="${customerDto.getCity()}">
 
             <label for="country">Quốc gia:</label>
-            <input type="text" id="country" name="country">
+            <input type="text" id="country" name="country" placeholder="Nhập quốc gia của bạn.." th:value="${customerDto.getCountry()}">
 
-            <label for="city">Thành phố:</label>
-            <input type="text" id="city" name="city">
+            <label for="address">Địa chỉ nhận hàng:</label>
+            <input type="text" id="address_line" name="address_line" placeholder="Nhập địa chỉ nhận hàng.." th:value="${customerDto.getAddress_line()}">
 
             <label for="phone">Số điện thoại:</label>
-            <input type="text" id="phone" name="phone">
+            <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại của bạn.." th:value="${customerDto.getPhone()}">
 
-            <button th:href="@{user/save}" type="submit" class="btn btn-primary">Thêm</button>
+            <button th:href="@{user/update}" type="submit" class="btn btn-primary">Lưu</button>
         </form>
+            
+        
     </div>
 </body>
 </html>

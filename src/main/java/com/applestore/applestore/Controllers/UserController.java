@@ -60,28 +60,56 @@ public class UserController {
         
     	CustomerDto customerDto = new CustomerDto();
 		customerDto = customerService.getCustomerByuserId(customUserDetails.getUser_id());
-		System.out.println("--------------------------------------------------------------------------");
-    	System.out.println(customerDto.getAddress_line());
-    	System.out.println(customerDto.getCity());
-    	System.out.println(customerDto.getCountry());
-    	System.out.println(customerDto.getPhone());
-    	System.out.println(customerDto.getAddress_line());
-    	System.out.println(customUserDetails.getL_name());
-    	System.out.println(customUserDetails.getF_name());
-    	
-    	System.out.println("--------------------------------------------------------------------------");
 		model.addAttribute("customerDto", customerDto);
     	model.addAttribute("user", customUserDetails);
     	
         return "/Fragments/user/customer_info";
     }
+    
+    @GetMapping("/edit")
+    public String Edit(Model model,Authentication authentication) {
+    	CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        
+    	CustomerDto customerDto = new CustomerDto();
+		customerDto = customerService.getCustomerByuserId(customUserDetails.getUser_id());
+		model.addAttribute("customerDto", customerDto);
+    	
+        return "/Fragments/user/Edit";
+    }
+    
+    @PostMapping("/update")
+    public String update(
+            @RequestParam("address_line") String address_line,
+            @RequestParam("country") String country,
+            @RequestParam("city") String city,
+            @RequestParam("phone") String phone,
+            Authentication authentication,
+            Model model
+    ){  
+        CustomUserDetails u = (CustomUserDetails) authentication.getPrincipal();
+        
+        CustomerDto customerDto = customerService.getCustomerByuserId(u.getUser_id());
+        Customer customer = customerService.getCustomerById1(customerDto.getCustomer_id());
+        customer.setAddress_line(address_line);
+        customer.setCountry(country);
+        customer.setCity(city);
+        customer.setPhone(phone);
+        customerService.saveCustomer(customer);
+        
+        
+        model.addAttribute("customerDto", customer);
+        model.addAttribute("user", u);
+        
+        return "/Fragments/user/customer_info";
+    }
+    
+    
 	
     
     @GetMapping("/enter_customer_info")
     public String EnterCustomerInfo() {
         return "/Fragments/user/enter_customer_info";
     }
-    
     
     @PostMapping("/save")
     public String save(
