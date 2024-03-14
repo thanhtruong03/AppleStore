@@ -4,6 +4,7 @@ import com.applestore.applestore.DTOs.RegisterDto;
 import com.applestore.applestore.DTOs.UserDto;
 import com.applestore.applestore.Entities.Role;
 import com.applestore.applestore.Entities.UserEntity;
+import com.applestore.applestore.Exception.UserNotFoundException;
 import com.applestore.applestore.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,5 +93,24 @@ public class UserService {
         userDto.setL_name(user.getL_name());
         return userDto;
     }
+    public void updateResetPasswordToken(String token, String gmail) throws UserNotFoundException {
+        UserEntity userEntity = userRepo.findUserByGmail(gmail);
+        if(userEntity !=null){
+            userEntity.setResetPasswordToken(token);
+            userRepo.save(userEntity);
+        }else {
+            throw new UserNotFoundException("Could not find any account with gmail "+gmail);
+        }
+    }
+    public UserEntity getByResetPasswordToken(String token){
+        return userRepo.findUserByResetPasswordToken(token);
+    }
 
+    public void updatePassword(UserEntity userEntity, String newPassword){
+        String hashedPw = passwordEncoder.encode(newPassword);
+        userEntity.setPassword(hashedPw);
+        userEntity.setResetPasswordToken(null);
+
+        userRepo.save(userEntity);
+    }
 }

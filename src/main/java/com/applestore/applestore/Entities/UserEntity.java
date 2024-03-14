@@ -34,6 +34,9 @@ public class UserEntity {
     @Column(columnDefinition = "nvarchar(20)" ,nullable = false)
     private String l_name;
 
+    @Column(name="reset_password_token",columnDefinition = "nvarchar(50)")
+    private String resetPasswordToken;
+
     @Column(nullable = false)
     private String gmail;
 
