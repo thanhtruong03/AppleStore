@@ -6,18 +6,11 @@ import com.applestore.applestore.Entities.Product;
 
 import com.applestore.applestore.Repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.PushBuilder;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -25,8 +18,6 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
-
-
 
     public ProductDto convertProductToDto(Product product){
         ProductDto productDto = new ProductDto();
@@ -64,7 +55,6 @@ public class ProductService {
         return base64Image;
     }
 
-
     public List<ProductDto> listALlProduct(){
         List<ProductDto> listAllProduct = new ArrayList<>();
         System.out.println("List DTO: ");
@@ -72,7 +62,7 @@ public class ProductService {
             listAllProduct.add(convertProductToDto(pro));
         }
         for (ProductDto productDto : listAllProduct){
-            System.out.println(productDto.getPrice() + " " + productDto.getPrice().getClass());
+            System.out.println(productDto.getName());
         }
         return listAllProduct;
     }
@@ -97,8 +87,8 @@ public class ProductService {
         return listResult;
     }
 
-    public List<ProductDto> getAllOrderByPriceAsc(Boolean condition){
-        List<ProductDto> listProductOrderByPriceAsc = listALlProduct();
+    public List<ProductDto> getAllOrderByPrice(Boolean condition){
+        List<ProductDto> listProductOrderByPrice = listALlProduct();
         if (condition){
             Comparator<ProductDto> comparator = new Comparator<ProductDto>() {
                 @Override
@@ -106,7 +96,7 @@ public class ProductService {
                     return o1.getIntPrice() - o2.getIntPrice();
                 }
             };
-            listProductOrderByPriceAsc.sort(comparator);
+            listProductOrderByPrice.sort(comparator);
         } else {
             Comparator<ProductDto> comparator = new Comparator<ProductDto>() {
                 @Override
@@ -114,12 +104,12 @@ public class ProductService {
                     return o2.getIntPrice() - o1.getIntPrice();
                 }
             };
-            listProductOrderByPriceAsc.sort(comparator);
+            listProductOrderByPrice.sort(comparator);
         }
-        for (ProductDto productDto : listProductOrderByPriceAsc){
-            System.out.println(productDto.getPrice());
+        for (ProductDto productDto : listProductOrderByPrice){
+            System.out.println("Price at order func: " + productDto.getPrice());
         }
-        return listProductOrderByPriceAsc;
+        return listProductOrderByPrice;
     }
 
     public List<String> getAllColor(){
@@ -142,6 +132,13 @@ public class ProductService {
     public String formatCurrency(int price){
         DecimalFormat df = new DecimalFormat("#,###.##");
         return df.format(price) + "₫";
+    }
+
+    public int convertToInt(String price) {
+        String stringPrice = price.replace(".", "").replace(" ", "").replace("₫", "").replace(",", "");
+        int intPrice = Integer.parseInt(stringPrice);
+        System.out.println(stringPrice + "Check");
+        return intPrice;
     }
 
 }

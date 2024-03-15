@@ -130,12 +130,12 @@ public class UserController {
     
         Customer customer = customerService.convertCustomerDtoToCustomer(customerDto);
         customerService.saveCustomer(customer);
-        
-        
+
+
         model.addAttribute("customerDto", customerDto);
-        
-        
-        return "/Fragments/user/customer_info";
+        model.addAttribute("user", u);
+
+        return "redirect:/user/customer_info";
     }
 
 	

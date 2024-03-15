@@ -29,10 +29,10 @@ public class AdminController {
 
     // -------------------- MANAGEMENT PRODUCT ---------------------------------------------
     @GetMapping("viewAll")
-    public String viewAllProduct(Model model, @Param("search") String search, @Param("selectedItem") String selectedItem, @Param("color") String color){
+    public String viewAllProduct(Model model, @Param("search") String search, @Param("comboBox") String price, @Param("color") String color){
         List<ProductDto> listAllProduct = new ArrayList<>();
         List<String> listColor = productService.getAllColor();
-        if (search == null && selectedItem == null && color == null) {
+        if (search == null && price == null && color == null) {
             System.out.println("Normal list: ");
             listAllProduct = productService.listALlProduct();
         }
@@ -41,22 +41,21 @@ public class AdminController {
             listAllProduct = productService.findProductByName(search);
         }
         else {
-            if (selectedItem != null){
-                if (selectedItem.equals("asc")){
+            if (price != null){
+                if (price.equals("asc")){
                     System.out.println("List ordered asc: ");
-                    listAllProduct = productService.getAllOrderByPriceAsc(true);
-                } else if (selectedItem.equals("desc")){
+                    listAllProduct = productService.getAllOrderByPrice(true);
+                } else if (price.equals("desc")){
                     System.out.println("List ordered desc: ");
-                    listAllProduct = productService.getAllOrderByPriceAsc(false);
+                    listAllProduct = productService.getAllOrderByPrice(false);
                 }
+            } else {
+                listAllProduct = productService.getProductByColor(color);
             }
-        }
-        if (color != null){
-            listAllProduct = productService.getProductByColor(color);
         }
         model.addAttribute("listAllProduct", listAllProduct);
         model.addAttribute("listColor", listColor);
-        System.out.println("SelectedItem: " + selectedItem);
+        System.out.println("SelectedItem: " + price);
         System.out.println("SelectedColor: " + color);
         return "Fragments/admin/view-all-product";
     }
@@ -92,7 +91,7 @@ public class AdminController {
             @RequestParam("id") Integer id,
             @RequestParam("name") String name,
             @RequestParam("description") String description,
-            @RequestParam("price") int price,
+            @RequestParam("price") String price,
             @RequestParam("stock") String stock,
             @RequestParam("color") String color
     ){
@@ -100,7 +99,7 @@ public class AdminController {
         product.setName(name);
         product.setDescription(description);
         product.setStock(String.valueOf(stock));
-        product.setPrice(price);
+        product.setPrice(productService.convertToInt(price));
         product.setColor(color);
         productService.saveProduct(product);
         return "redirect:/admin/viewAll";
