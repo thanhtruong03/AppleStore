@@ -1,162 +1,325 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Xem danh sách các sản phẩm</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
-    <script src="https://unpkg.com/currency.js@~2.0.0/dist/currency.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Xem tất cả sản phẩm</title>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" th:href="@{../../assets/css/view-all-product.css}" type="text/css">
+    <link
+            rel="stylesheet"
+            data-purpose="Layout StyleSheet"
+            title="Web Awesome"
+            href="/css/app-wa-462d1fe84b879d730fe2180b0e0354e0.css?vsn=d"
+    >
+
+    <link
+            rel="stylesheet"
+            href="https://site-assets.fontawesome.com/releases/v5.15.4/css/all.css"
+    >
+
+    <script src="/static/JS/editInforProduct.js"></script>
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />-->
 </head>
 <body>
-<div class="container-fluid">
-    <h2 class="text-center">Danh sách các sản phẩm</h2>
-    <form>
-        <div>
-            <input type="text" name="search" placeholder="Tim kiem san pham" class="form-control pull-right">
-            <div class="input-group-btn">
-                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
-            </div>
+<div class="container">
+    <div class="header">
+        <div class="listProductTitle">
+            <h1>DANH SÁCH SẢN PHẨM</h1>
         </div>
-    </form>
-    <div>
-        <a th:href="@{/admin/addNew}">Thêm sản phẩm mới</a>
-        <a th:href="@{/admin/viewAll}">Quay ve</a>
-        <label th:for="options">Sap xep theo:</label>
-        <select id="comboBox" name="comboBox">
-            <option value=""></option>
-            <option value="asc">Gia tang dan</option>
-            <option value="desc">Gia giam dan</option>
-        </select>
+        <div class="funtionsBar">
+            <form th:action="@{/admin/viewAll}" method="get" id="sort-form">
+                <div class="sort">
+                    <label class="sortLabel" for="comboBox">Sắp xếp theo</label>
+                    <select id="comboBox" name="price">
+                        <option value="">      Chọn</option>
+                        <option value="asc">Giá tăng dần</option>
+                        <option value="desc">Giá giảm dần</option>
+                    </select>
+                </div>
+            </form>
 
-        <form th:action="@{/admin/viewAll}" method="get">
-            <li style="list-style: none" th:each="color : ${listColor}">
-                <input type="radio" th:value="${color}" name="color" id="color"/>
-                <label th:for="${color}">[[${color}]]</label>
-            </li>
-            <button type="submit">Lọc</button>
-        </form>
+            <div class="filterColor">
+                <form class="colorComboBoxForm" th:action="@{/admin/viewAll}" method="get">
+                    <label class="colorComboBoxLabel" th:for="options">Lọc theo màu</label>
+                    <select name="color" id="colorComboBox">
+                        <option value="">Chọn màu</option>
+                        <th:block th:each="color : ${listColor}" >
+                            <option th:value="${color}">[[${color}]]</option>
+                        </th:block>
+                    </select>
+                    <button class="filterColorBtn" type="submit"><i class="far fa-filter" style="font-size: 20px; color: white"></i></button>
+                </form>
+            </div>
 
-
+            <form th:action="@{/admin/viewAll}" method="get" id="search-form">
+                <div class="searchBox">
+                    <label>
+                        <input class="inputToSearch" name="search" type="text" placeholder="Tìm kiếm">
+                    </label>
+                    <i class="far fa-search" id="search-icon" style="font-size: 25px; color: #A9A9A9; cursor: pointer"></i>
+                </div>
+            </form>
+        </div>
     </div>
-    <div th:if="${listAllProduct.size() > 0} ">
-        <table class="border-2">
-            <thead class="border-2">
-            <tr>
-                <th class="mx-auto">ID</th>
-                <th>Tên sản phẩm</th>
-                <th>Mô tả</th>
-                <th>Số lượng trong kho</th>
-                <th>Giá</th>
-                <th>Màu sắc</th>
-                <th>Hình ảnh</th>
-            </tr>
-            </thead>
-            <tbody>
-            <th:block th:each="ProductDto : ${listAllProduct}">
-                <tr>
-                    <td>[[${ProductDto.getProduct_id}]]</td>
-                    <td>[[${ProductDto.getName}]]</td>
-                    <td>[[${ProductDto.getDescription}]]</td>
-                    <td>[[${ProductDto.getStock}]]</td>
-                    <td>[[${ProductDto.getPrice}]]</td>
-                    <td>[[${ProductDto.getColor}]]</td>
-                    <td>
-                        <img style="width: 150px" th:src="'data:image/jpeg;base64,' + ${ProductDto.getImg()}"/>
-                    </td>
-                    <td>
-                        <button class="edit-btn"
-                                th:data-name="${ProductDto.getName()}"
-                                th:data-id= "${ProductDto.getProduct_id()}"
-                                th:data-des= "${ProductDto.getDescription()}"
-                                th:data-stock= "${ProductDto.getStock()}"
-                                th:data-price= "${ProductDto.getPrice()}"
-                                th:data-color="${ProductDto.getColor()}">Edit</button>
-                        <a th:href="@{'/admin/delete/id=' + ${ProductDto.getProduct_id()}}">Xóa</a>
-                    </td>
+
+    <div class="addNewDiv">
+        <button class="addNewBtn" onclick="openEditModal(addNewFormWrapper)">
+            <i class="far fa-plus-circle" style="font-size: 35px; color: white; margin-left: 9px"></i>
+            <label class="addNewLabel">Thêm mới</label>
+        </button>
+    </div>
+
+    <div id="tableArea">
+        <div id="rollback-wrapper">
+            <button id="rollback-btn">
+                <a href="/admin/viewAll" id="desination"><i class="far fa-sync-alt" id="reload-icon" style="color: #032D3C;font-size: 20px"></i></a>
+            </button>
+        </div>
+        <div class="tableWrapper">
+            <table class="productTable">
+                <tr class="table-header">
+                    <th>STT</th>
+                    <th>ID</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Mô tả</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Màu sắc</th>
+                    <th>Hình ảnh</th>
+                    <th>Thao tác</th>
                 </tr>
-            </th:block>
-            </tbody>
-        </table>
+                <th:block th:each="ProductDto : ${listAllProduct}">
+                    <tr id="productTr">
+                        <td class="stt-column"></td>
+                        <td>[[${ProductDto.getProduct_id}]]</td>
+                        <td>[[${ProductDto.getName}]]</td>
+                        <td id="descriptionTd">[[${ProductDto.getDescription}]]</td>
+                        <td>[[${ProductDto.getStock}]]</td>
+                        <td>[[${ProductDto.getPrice}]]</td>
+                        <td>[[${ProductDto.getColor}]]</td>
+                        <td>
+                            <img style="width: 100px" th:src="'data:image/jpeg;base64,' + ${ProductDto.getImg()}"/>
+                        </td>
+
+                        <td>
+                            <div class="handleWrapper">
+                                <button class="editBtn" style="margin-right: 10px" onclick="openEditModal(editFormWrapper)"
+                                        th:data-id="${ProductDto.getProduct_id()}"
+                                        th:data-name="${ProductDto.getName()}"
+                                        th:data-des="${ProductDto.getDescription()}"
+                                        th:data-stock="${ProductDto.getStock()}"
+                                        th:data-price="${ProductDto.getPrice()}"
+                                        th:data-color="${ProductDto.getColor()}" >
+                                    <i class="far fa-pen-square" style="font-size: 30px; color: white"></i>
+                                </button>
+                                <button class="deleteBtn"
+                                        th:data-product_id="${ProductDto.getProduct_id()}"
+                                        onclick="openEditModal(confirmDialog)">
+                                    <i class="far fa-trash" style="font-size: 30px; color: white"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </th:block>
+            </table>
+        </div>
     </div>
-    <div th:if="${listAllProduct.size() == 0}">
-        <h1>Empty</h1>
+
+
+
+    <!--        FORM TO EDIT PRODUCT                 -->
+    <div class="back-ground-wrapper">
+        <div id="edit-form-wrapper">
+            <form class="container" id="editForm" th:action="@{/admin/update}" method="post">
+                <h3 class="header-form">Chỉnh sửa thông tin sản phẩm</h3>
+                <div id="wrapper">
+                    <div class="input-price">
+                        <span class="input-group-text" id="addon-wrapping-1" style="margin-bottom: 5px">Tên sản phẩm:</span>
+                        <input type="text" name="name"  class="form-control" aria-label="Username" aria-describedby="addon-wrapping" minlength="7" required="required">
+                        <input type="text" name="id"  hidden="hidden">
+                    </div>
+
+                    <div class="input-price">
+                        <span class="input-group-text" id="addon-wrapping-2" style="margin-bottom: 5px">Giá:</span>
+                        <input type="number" name="price" id="price" class="form-control" aria-label="Username" aria-describedby="addon-wrapping" minlength="7" required="required">
+                    </div>
+
+                    <div class="input-color">
+                        <span class="input-group-text" id="addon-wrapping-3" style="margin-bottom: 5px">Màu sắc:</span>
+                        <input type="text" name="color"  class="form-control" aria-label="Username" aria-describedby="addon-wrapping" minlength="2" required="required">
+                    </div>
+
+                    <div class="input-stock">
+                        <span class="input-group-text" id="addon-wrapping-4" style="margin-bottom: 5px">Số lượng:</span>
+                        <input type="number" name="stock" class="form-control" aria-label="Username" aria-describedby="addon-wrapping" min="1" required="required">
+                    </div>
+
+                    <div id="description" class="input-description">
+                        <span class="input-group-text" id="addon-wrapping-5" style="margin-bottom: 5px">Mô tả sản phẩm:</span>
+                        <textarea name="description" id="descriptionTextarea" class="form-control" aria-label="Username" aria-describedby="addon-wrapping" minlength="10" required="required"></textarea>
+                    </div>
+                </div>
+                <div class="wrapper-button">
+                    <button type="button" class="btn btn-second" onclick="closeEditModal(editFormWrapper)">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!--        ADD NEW PRODUCT FORM-->
+    <div class="back-ground-wrapper-add">
+        <div class="adding-form-wrapper">
+            <form class="add-new-form" th:action="@{/admin/save}" method="post" th:object="${Product}" enctype="multipart/form-data">
+                <h2 class="title-form">THÊM SẢN PHẨM MỚI</h2>
+                <div class="header-wrapper">
+                    <div class="wrapper-name">
+                        <span class="input-group-text" id="addon-wrapping-0">Tên sản phẩm:</span>
+                        <input type="text" name="name" class="add-form-control" aria-label="Username" aria-describedby="addon-wrapping" minlength="6" maxlength="100" required="required">
+                    </div>
+
+                    <div class="wrapper-price">
+                        <span class="input-group-text" id="addon-wrapping-7">Giá:</span>
+                        <input type="text" name="price" class="add-form-control" aria-label="Username" aria-describedby="addon-wrapping" minlength="7" required="required">
+                    </div>
+
+                    <div class="wrapper-color">
+                        <span class="input-group-text" id="addon-wrapping-8">Màu sắc:</span>
+                        <input type="text" name="color" class="add-form-control" aria-label="Username" aria-describedby="addon-wrapping" minlength="1" required="required">
+                    </div>
+
+                    <div class="wrapper-stock">
+                        <span class="input-group-text" id="addon-wrapping-9">Số lượng:</span>
+                        <input type="number" name="stock" class="add-form-control" aria-label="Username" aria-describedby="addon-wrapping" min="1" required="required">
+                    </div>
+
+                    <div class="wrapper-image">
+                        <span class="input-group-text" id="addon-wrapping-10">Hình ảnh:</span>
+                        <input type="file" name="img" id="upload-img" style="display: none" class="add-form-control" aria-label="Username" aria-describedby="addon-wrapping" accept="image/jpeg, image/png" required="required">
+                        <label class="upload-btn" id="upload-label" for="upload-img">
+                            Chọn ảnh
+                        </label>
+                        <i class="far fa-file-check" id="success-icon"></i>
+                    </div>
+
+                    <div class="wrapper-description">
+                        <span class="input-group-text" id="addon-wrapping-6">Mô tả sản phẩm:</span>
+                        <textarea name="description" class="add-form-control" aria-label="Username" aria-describedby="addon-wrapping" minlength="10" required="required"></textarea>
+                    </div>
+                </div>
+
+                <div class="footer-wrapper">
+                    <button type="button" class="btn btn-second" onclick="closeEditModal(addNewFormWrapper)">Hủy</button>
+                    <button th:href="@{admin/save}" type="submit" class="btn btn-primary">Thêm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="back-ground-wrapper-confirm">
+        <div class="confirm-form-wrapper">
+            <form th:action="@{'/admin/delete/id='}" id="confirm-form">
+                <h2 id="header-title">Xác nhận</h2>
+                <div class="body-wrapper">
+                    <p>Bạn có chắc chắn muốn xóa sản phẩm này không ?</p>
+                </div>
+                <div id="footer-wrapper">
+                    <button id="no-btn" type="button" onclick="closeEditModal(confirmDialog)">Không</button>
+                    <button id="yes-btn" type="submit">Có</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-<form style="display: none" id="editForm" th:action="@{/admin/update}" method="post">
-    <div class="input-group flex-nowrap">
-        <span class="input-group-text" id="addon-wrapping-0">Tên sản phẩm:</span>
-        <input type="text" name="name" class="form-control" aria-label="Username" aria-describedby="addon-wrapping">
-        <input type="text" name="id"  hidden="hidden">
-    </div>
-    <div class="input-group flex-nowrap">
-        <span class="input-group-text" id="addon-wrapping-1">Mô tả sản phẩm:</span>
-        <textarea name="description" class="form-control" aria-label="Username" aria-describedby="addon-wrapping"></textarea>
-    </div>
-    <div class="input-group flex-nowrap">
-        <span class="input-group-text" id="addon-wrapping-2">Giá:</span>
-        <input type="text" name="price"  class="form-control" aria-label="Username" aria-describedby="addon-wrapping">
-    </div>
-    <div class="input-group flex-nowrap">
-        <span class="input-group-text" id="addon-wrapping-3">Màu sac:</span>
-        <input type="text" name="color"  class="form-control" aria-label="Username" aria-describedby="addon-wrapping">
-    </div>
-    <div class="input-group flex-nowrap">
-        <span class="input-group-text" id="addon-wrapping-4">Số lượng:</span>
-        <input type="number" name="stock" class="form-control" aria-label="Username" aria-describedby="addon-wrapping">
-    </div>
-    <button type="submit" class="btn btn-primary">Cập nhât</button>
-    <button type="button" class="btn btn-second">Hủy</button>
-</form>
-
-<form th:action="@{/admin/viewAll}" method="get" class="comboBoxForm" hidden="hidden">
-    <input name="selectedItem">
-</form>
-
-<form th:action="@{/admin/viewAll}" method="get" class="radioForm" hidden="hidden">
-    <input name="color">
-</form>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
 <script>
-    // Xử li ComboBox
-    var selectedItem = document.getElementById("comboBox");
-    var value;
-    selectedItem.addEventListener("change", function (){
-        value = selectedItem.value;
-        tmp = document.querySelector("input[name='selectedItem']");
-        tmp.value = value
-        form = document.querySelector(".comboBoxForm")
-        form.submit()
-    });
+    const editFormWrapper = document.querySelector('.back-ground-wrapper')
+    const edit_btn = document.querySelector('.editBtn')
+    const addNewFormWrapper = document.querySelector('.back-ground-wrapper-add')
+    const confirmDialog = document.querySelector('.back-ground-wrapper-confirm')
+    const cancel_btn = document.querySelector(".btn-second")
+    function openEditModal (wrapper){
+        wrapper.style.display = 'flex';
+        // console.log("Open modal")
+    }
 
-    // Gắn sự kiện click vào nút "Edit" bằng jQuery
-    $(document).on('click', '.edit-btn', function() {
-        // Lấy thông tin sản phẩm từ thuộc tính data-product của nút "Edit"
-        var product = {
+    function closeEditModal (wrapper) {
+        wrapper.style.display = 'none';
+    }
+
+    $(".filterColorBtn").click(function () {
+        $(".colorComboBoxForm").submit()
+    })
+
+    $("#search-icon").click(function () {
+        $("#search-form").submit();
+    })
+
+    $('.searchBox').keydown(function (e) {
+        if (e.keyCode === 13) {
+            console.log("Enter key")
+            $("#search-form").submit();
+        }
+    })
+
+    $("#comboBox").change(function () {
+        console.log("Clicked: " + $('#comboBox').val())
+        $("#sort-form").submit();
+    })
+
+    $('.editBtn').click(function () {
+        const product = {
             id: $(this).data('id'),
             name: $(this).data('name'),
             des: $(this).data('des'),
             price: $(this).data('price'),
             stock: $(this).data('stock'),
             color: $(this).data('color')
-        }
-        console.log(product)
+        };
 
-        // Điền thông tin sản phẩm vào các trường của form chỉnh sửa
+        console.log(parseFloat(product.price.replaceAll(",", "").replace(" ₫", "")))
+
         $('#editForm input[name="name"]').val(product.name);
         $('#editForm input[name="id"]').val(product.id);
         $('#editForm textarea[name="description"]').val(product.des);
-        $('#editForm input[name="price"]').val(product.price);
+        $('#editForm input[name="price"]').val(parseFloat(product.price.replaceAll(",", "").replace(" ₫", "")));
         $('#editForm input[name="stock"]').val(product.stock);
         $('#editForm input[name="color"]').val(product.color);
-        // Hiển thị form chỉnh sửa
-        $('#editForm').show();
     });
 
-    // Gắn sự kiện click vào nút "Hủy" trong form chỉnh sửa để ẩn form đi
-    $('#editForm .btn-second').on('click', function() {
-        $('#editForm').hide();
+    $(document).ready(function() {
+        $("#upload-img").change(function() {
+            $('#upload-label').text("")
+            $('#success-icon').css("display", "flex")
+            $('.upload-btn').css("border", "2px solid #54B435");
+        });
     });
+    var id = ''
+    $('.deleteBtn').click(function () {
+        id = $(this).data('product_id')
+        console.log(id)
+    })
+
+    $('#yes-btn').click(function () {
+        const form = $('#confirm-form')
+        form.attr('action', '/admin/delete/id=' + id)
+        form.submit();
+    })
+
+    $(document).ready(function() {
+        // Add numbering to STT column
+        $(".productTable tbody tr").each(function(index) {
+            $(this).find(".stt-column").text(index);
+        });
+    });
+
 </script>
 </html>

@@ -135,7 +135,7 @@ public class UserController {
         model.addAttribute("customerDto", customerDto);
         model.addAttribute("user", u);
 
-        return "redirect:/user/customer_info";
+        return "/Fragments/user/customer_info";
     }
 
 	
