@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin khách hàng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex; /* Sử dụng flexbox để căn giữa nội dung */
+            justify-content: center; /* Căn giữa theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            height: 100vh; /* Thiết lập chiều cao của body là 100% của viewport */
+        }
+        .container {
+            max-width: 600px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            text-align: left;
+            margin-left: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            margin-top: 30px; /* Thêm khoảng cách giữa nội dung và nút */
+            margin-right: 60px; /* Thêm khoảng cách giữa các nút */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .edit-button {
+            background-color: #008CBA;
+        }
+        .edit-button:hover {
+            background-color: #005f79;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Thông tin cá nhân</h1>
+        <p><strong>Họ và tên:</strong> [[${user.getF_name()}]] [[${user.getL_name()}]]</p>
+        <p><strong>Thành phố:</strong> [[${customerDto.getCity()}]]</p>
+        <p><strong>Quốc gia:</strong> [[${customerDto.getCountry()}]]</p>
+        <p><strong>Địa chỉ nhận hàng:</strong> [[${customerDto.getAddress_line()}]]</p>
+        <p><strong>Email:</strong> [[${user.getGmail()}]]</p>
+        <p><strong>Phone:</strong> [[${customerDto.getPhone()}]]</p>
+        <button onclick="window.location.href = '/user/products';">Quay lại</button>
+        <button class="edit-button" onclick="window.location.href = '/user/edit';">Edit</button>
+    </div>
+</body>
+</html>

@@ -2,9 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </head>
-<body>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
+    header {
+        background-color: #1F2544;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        margin: 5px;
+        border-radius: 18px;
+    }
+
+    .logo{
+        cursor: pointer;
+        margin-right: auto;
+    }
+
+    .profile {
+        cursor: pointer;
+    }
+
+    .nav__links {
+        display: flex;
+        background-color: white;
+    }
+
+</style>
+<body>
+    <header style="height: 60px">
+        <a class="logo" style="margin-left: 6px; margin-top: 4px">
+            <img th:src="@{../../images/logologoAppleWorld.png}" alt="logo">
+        </a>
+        <nav>
+            <ul class="nav__links" style="list-style: none; border-radius: 50px; align-items: center">
+                <li><input type="text" placeholder="Tìm kiếm" style="font-family: inherit; font-size: inherit;height: 30px; margin: 2px; border-radius: 50px; padding-left: 10px; border-style: hidden; outline: none"></li>
+                <li><i class="fas fa-search" style="font-size: 25px; color: black; cursor: pointer; padding-right: 5px; padding-top: 5px"></i></li>
+            </ul>
+        </nav>
+        <a class="profile"><i class="fas fa-user-circle" style="color: white; font-size: 40px; padding-right: 30px; padding-left: 50px"></i></a>
+    </header>
+    <form th:action="@{/logout}" method="POST">
+        <button type="submit">Logout</button>
+    </form>
 </body>
 </html>

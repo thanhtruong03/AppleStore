@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>lịch Sử Mua Hàng</h1>
+    <div>
+        <button onclick="window.location.href = '/user/products';">Quay lại</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Màu</th>
+                    <th>Giá tiền</th>
+                    <th>Ngày mua</th>
+                    <th>Địa chỉ nhận</th>
+                    <th>Hình ảnh</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="listDetailOrder : ${listDetailOrder}">
+                    <tr>
+                        <td>[[${listDetailOrder.getProduct_name}]]</td>
+                        <td>[[${listDetailOrder.getProduct_color}]]</td>
+                        <td>[[${listDetailOrder.getPrice}]]</td>
+                        <td>[[${listDetailOrder.getOrder_date}]]</td>
+                        <td>[[${listDetailOrder.getAddress_line}]]</td>
+                        <td>
+                            <img style="width: 150px" th:src="'data:image/jpeg;base64,' + ${listDetailOrder.getImg()}"/>
+                        </td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
