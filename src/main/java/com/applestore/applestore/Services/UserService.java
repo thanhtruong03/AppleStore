@@ -2,11 +2,11 @@ package com.applestore.applestore.Services;
 
 import com.applestore.applestore.DTOs.RegisterDto;
 import com.applestore.applestore.DTOs.UserDto;
-import com.applestore.applestore.Entities.Role;
-import com.applestore.applestore.Entities.UserEntity;
+import com.applestore.applestore.Entities.*;
 import com.applestore.applestore.Exception.UserNotFoundException;
 import com.applestore.applestore.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,10 +37,10 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserDto findByGmail(String email) {
-        UserEntity user = userRepo.findUserByGmail(email);
-        if(user !=null){
-            return mapToUserDto(user);
+    public UserEntity findByGmail(String email) {
+        UserEntity userEntity = userRepo.findUserByGmail(email);
+        if(userEntity !=null){
+            return userEntity;
         }
         return null;
     }
@@ -112,5 +112,27 @@ public class UserService {
         userEntity.setResetPasswordToken(null);
 
         userRepo.save(userEntity);
+    }
+
+    public UserEntity createNewUserAfterOAuthlogin(String email, String f_name, String l_name, AuthenticationProvider provider) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(email);
+        userEntity.setPassword(null);
+        userEntity.setGmail(email);
+        userEntity.setF_name(f_name);
+        userEntity.setL_name(l_name);
+        Role userRole = roleService.findByName("ROLE_USER").orElseThrow(()-> new RuntimeException("Role Is Not Found"));
+        Collection<Role> roles = new ArrayList<>();
+        roles.add(userRole);
+        userEntity.setRoles(roles);
+        userEntity.setAuthProvider(provider);
+        userRepo.save(userEntity);
+        return userEntity;
+    }
+
+    public UserEntity updateUserAfterOAuthlogin(UserEntity userEntity, AuthenticationProvider authenticationProvider) {
+        userEntity.setAuthProvider(authenticationProvider);
+        userRepo.save(userEntity);
+        return userEntity;
     }
 }

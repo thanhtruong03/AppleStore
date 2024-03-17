@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
@@ -21,7 +22,6 @@ public class CustomUserDetails implements UserDetails {
     private String l_name;
     private String f_name;
     private Collection<? extends GrantedAuthority> authorities;
-
     public CustomUserDetails(UserEntity user){
         this.user_id = user.getUser_id();
         this.username = user.getUsername();
@@ -76,6 +76,5 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
 }

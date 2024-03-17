@@ -6,7 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import com.applestore.applestore.Entities.UserEntity;
+import com.applestore.applestore.Security.Oauth2.CustomOAuth2User;
+import com.applestore.applestore.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +38,8 @@ import org.springframework.security.core.Authentication;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
+    private UserService userService;
 	
 	@Autowired
     private ProductService productService;
@@ -42,15 +49,29 @@ public class UserController {
 	
 	@Autowired
 	private OrderService orderService ;
+
+    public UserEntity curUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        String gmail = "";
+        if (principal instanceof OAuth2User) {
+            OAuth2User oauthUser = (OAuth2User) principal;
+            gmail =  oauthUser.getAttribute("email");
+        } else if (principal instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) principal;
+            gmail =  userDetails.getGmail();
+        }
+        return userService.findByGmail(gmail);
+    }
 	
-	
-//	@GetMapping("/")
-//    public String index(Model model, Authentication authentication){
-//        CustomUserDetails u = (CustomUserDetails) authentication.getPrincipal();
-//        // Lấy tên người dùng
-//        model.addAttribute("user_id",u.getUser_id());
-//        return "/Fragments/user/header";
-//    }
+	@GetMapping("/")
+    public String index(Model model){
+        UserEntity user = curUser();
+//
+        model.addAttribute("name", user.getGmail()+user.getL_name()+user.getF_name());
+//        model.addAttribute("username",k.getUsername());
+        return "/Fragments/user/header";
+    }
 	
 	
     @GetMapping("/customer_info")

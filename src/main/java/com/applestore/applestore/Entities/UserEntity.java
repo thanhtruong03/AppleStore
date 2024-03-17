@@ -25,22 +25,25 @@ public class UserEntity {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(nullable = false)
     private String password;
 
-    @Column(columnDefinition = "nvarchar(20)" ,nullable = false)
+    @Column(columnDefinition = "nvarchar(50)" ,nullable = false)
     private String f_name;
 
-    @Column(columnDefinition = "nvarchar(20)" ,nullable = false)
+    @Column(columnDefinition = "nvarchar(50)")
     private String l_name;
 
     @Column(name="reset_password_token",columnDefinition = "nvarchar(50)")
     private String resetPasswordToken;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="auth_provider")
+    private AuthenticationProvider authProvider;
+
     @Column(nullable = false)
     private String gmail;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
